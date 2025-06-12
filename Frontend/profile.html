@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doodle Jump - Profile</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="profile-container">
+            <h1>User Profile</h1>
+
+            <!-- Profile Stats -->
+            <div class="profile-stats">
+                <div class="stat-card">
+                    <span class="stat-number" id="totalScores">Loading...</span>
+                    <span class="stat-label">Games Played</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="bestScore">Loading...</span>
+                    <span class="stat-label">Best Score</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="unlockedAchievements">Loading...</span>
+                    <span class="stat-label">Achievements</span>
+                </div>
+            </div>
+
+            <div class="profile-sections">
+                <!-- Profile Information -->
+                <div class="profile-section">
+                    <h2>Profile Information</h2>
+                    <div class="profile-info">
+                        <div class="info-row">
+                            <label>Username:</label>
+                            <span id="currentUsername">Loading...</span>
+                        </div>
+                        <div class="info-row">
+                            <label>Account Type:</label>
+                            <span id="accountType">Loading...</span>
+                        </div>
+                        <div class="info-row">
+                            <label>Member Since:</label>
+                            <span id="memberSince">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Update Profile -->
+                <div class="profile-section">
+                    <h2>Update Profile</h2>
+                    <form id="updateProfileForm" class="profile-form">
+                        <div class="form-group">
+                            <label for="newUsername">New Username (optional):</label>
+                            <input type="text" id="newUsername" placeholder="Enter new username">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="currentPassword">Current Password:</label>
+                            <input type="password" id="currentPassword" placeholder="Required to change password">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="newPassword">New Password (optional):</label>
+                            <input type="password" id="newPassword" placeholder="Enter new password">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm New Password:</label>
+                            <input type="password" id="confirmPassword" placeholder="Confirm new password">
+                        </div>
+
+                        <button type="submit" class="update-btn">Update Profile</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Recent Scores Section -->
+            <div class="profile-section">
+                <h2>Recent Scores</h2>
+                <div id="recentScores" class="recent-scores">
+                    Loading recent scores...
+                </div>
+            </div>
+
+            <!-- Profile Actions -->
+            <div class="profile-actions">
+                <button onclick="backToGame()">Back to Game</button>
+                <button onclick="viewAchievements()">View Achievements</button>
+                <button onclick="viewLeaderboard()">Leaderboard</button>
+                <button onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Debug: Log all elements on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('DOM loaded, checking elements...');
+
+            const requiredElements = [
+                'currentUsername', 'accountType', 'memberSince',
+                'totalScores', 'bestScore', 'unlockedAchievements',
+                'recentScores', 'updateProfileForm'
+            ];
+
+            requiredElements.forEach(id => {
+                const element = document.getElementById(id);
+                console.log(`Element ${id}:`, element ? 'FOUND' : 'NOT FOUND');
+            });
+        });
+    </script>
+
+    <script src="js/api.js"></script>
+    <script src="js/profile.js"></script>
+</body>
+</html>

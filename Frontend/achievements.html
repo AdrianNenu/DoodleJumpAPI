@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doodle Jump - Achievements</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="achievements-container">
+            <h1>Achievements</h1>
+
+            <div class="achievements-stats">
+                <div class="stat-card">
+                    <span class="stat-number" id="unlockedCount">0</span>
+                    <span class="stat-label">Unlocked</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="totalCount">0</span>
+                    <span class="stat-label">Total</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="progressPercent">0%</span>
+                    <span class="stat-label">Progress</span>
+                </div>
+            </div>
+
+            <div class="achievements-grid" id="achievementsGrid">
+            </div>
+
+            <div class="achievements-actions">
+                <button onclick="backToGame()">Back to Game</button>
+                <button onclick="viewLeaderboard()">Leaderboard</button>
+                <button onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/achievements.js"></script>
+</body>
+</html>

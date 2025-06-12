@@ -1,0 +1,6 @@
+@DoodleJumpAPI_HostAddress = http://localhost:5219
+
+GET {{DoodleJumpAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

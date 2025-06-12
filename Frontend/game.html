@@ -1,0 +1,377 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doodle Jump - Game</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <div class="game-info">
+                <span id="playerName">Player: </span>
+                <span id="adminBadge" class="admin-badge hidden">ADMIN</span>
+            </div>
+            <div class="game-stats">
+                <span id="scoreDisplay">Score: 0</span>
+                <span id="livesDisplay">Lives: 3</span>
+            </div>
+            <div class="game-controls">
+                <button id="pauseBtn">Pause</button>
+                <button onclick="viewProfile()">Profile</button>
+                <button onclick="viewAchievements()">Achievements</button>
+                <button onclick="viewLeaderboard()">Leaderboard</button>
+                <button onclick="viewAdmin()" id="adminBtn" class="admin-btn hidden">Admin Panel</button>
+                <button onclick="logout()">Logout</button>
+            </div>
+        </div>
+
+        <canvas id="gameCanvas" width="400" height="600"></canvas>
+
+        <div class="game-instructions">
+            <p><strong>Controls:</strong> Use A/D or Arrow Keys to move left/right</p>
+            <p>Jump on platforms to go higher and score points!</p>
+            <p><strong>Tips:</strong> Red platforms give extra bounce! Avoid falling off the screen!</p>
+        </div>
+
+        <div class="game-over-screen hidden" id="gameOverScreen">
+            <div class="game-over-content">
+                <h2>Game Over!</h2>
+                <p>Final Score: <span id="finalScore">0</span></p>
+                <div class="game-over-actions">
+                    <button onclick="restartGame()">Play Again</button>
+                    <button onclick="viewLeaderboard()">View Leaderboard</button>
+                    <button onclick="viewProfile()">View Profile</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Achievement Notification Container -->
+        <div id="achievementNotifications" class="achievement-notifications">
+            <!-- Achievement notifications will appear here -->
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/game.js"></script>
+
+    <script>
+        // Show admin button and enhanced features for admin users
+        document.addEventListener('DOMContentLoaded', function () {
+            const isAdmin = localStorage.getItem('isAdmin') === 'true';
+
+            if (isAdmin) {
+                document.getElementById('adminBtn').classList.remove('hidden');
+
+                // Add admin styling to the admin badge if it exists
+                const adminBadge = document.getElementById('adminBadge');
+                if (adminBadge && !adminBadge.classList.contains('hidden')) {
+                    adminBadge.style.background = 'linear-gradient(45deg, #e74c3c, #c0392b)';
+                    adminBadge.textContent = '👑 ADMIN';
+                    adminBadge.style.animation = 'pulse 2s infinite';
+                }
+            }
+        });
+
+        // Navigation functions
+        function viewProfile() {
+            window.location.href = 'profile.html';
+        }
+
+        function viewAdmin() {
+            if (localStorage.getItem('isAdmin') === 'true') {
+                window.location.href = 'admin.html';
+            } else {
+                alert('Access denied. Admin privileges required.');
+            }
+        }
+
+        function viewAchievements() {
+            window.location.href = 'achievements.html';
+        }
+
+        function viewLeaderboard() {
+            window.location.href = 'leaderboard.html';
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.clear();
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Enhanced game functions
+        function restartGame() {
+            if (game) {
+                game.restart();
+            }
+        }
+
+        // Add CSS animation for admin badge pulse effect
+        const style = document.createElement('style');
+        style.textContent = `
+                @keyframes pulse {
+                    0% { transform: scale(1); }
+                    50% { transform: scale(1.05); }
+                    100% { transform: scale(1); }
+                }
+
+                .admin-btn {
+                    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%) !important;
+                    border: 2px solid #fff;
+                    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+                }
+
+                .admin-btn:hover {
+                    background: linear-gradient(135deg, #c0392b 0%, #a93226 100%) !important;
+                    box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+                    transform: translateY(-3px);
+                }
+
+                .achievement-notifications {
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    z-index: 1500;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    max-width: 350px;
+                }
+
+                .game-over-actions {
+                    display: flex;
+                    gap: 15px;
+                    justify-content: center;
+                    flex-wrap: wrap;
+                    margin-top: 20px;
+                }
+
+                .game-over-actions button {
+                    margin: 5px;
+                    padding: 12px 20px;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                    border: none;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    font-size: 14px;
+                    font-weight: 600;
+                    transition: all 0.3s ease;
+                    min-width: 120px;
+                }
+
+                .game-over-actions button:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+                }
+
+                .game-controls {
+                    display: flex;
+                    gap: 10px;
+                    align-items: center;
+                    flex-wrap: wrap;
+                }
+
+                .game-controls button {
+                    padding: 8px 16px;
+                    background: rgba(255, 255, 255, 0.2);
+                    color: white;
+                    border: 1px solid rgba(255, 255, 255, 0.3);
+                    border-radius: 20px;
+                    cursor: pointer;
+                    font-size: 14px;
+                    font-weight: 600;
+                    transition: all 0.3s ease;
+                    backdrop-filter: blur(10px);
+                }
+
+                .game-controls button:hover {
+                    background: rgba(255, 255, 255, 0.3);
+                    transform: translateY(-1px);
+                    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+                }
+
+                .game-controls button:active {
+                    transform: translateY(0);
+                }
+
+                #pauseBtn {
+                    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%) !important;
+                    border: none !important;
+                }
+
+                #pauseBtn:hover {
+                    background: linear-gradient(135deg, #e67e22 0%, #d35400 100%) !important;
+                }
+
+                @media (max-width: 768px) {
+                    .game-controls {
+                        gap: 8px;
+                    }
+
+                    .game-controls button {
+                        padding: 6px 12px;
+                        font-size: 12px;
+                    }
+
+                    .achievement-notifications {
+                        right: 10px;
+                        top: 10px;
+                        max-width: 280px;
+                    }
+
+                    .game-over-actions {
+                        flex-direction: column;
+                        align-items: center;
+                    }
+
+                    .game-over-actions button {
+                        min-width: 180px;
+                    }
+                }
+
+                @media (max-width: 480px) {
+                    .game-header {
+                        padding: 10px 15px;
+                        gap: 10px;
+                    }
+
+                    .game-info, .game-stats, .game-controls {
+                        gap: 8px;
+                    }
+
+                    .game-controls button {
+                        padding: 5px 10px;
+                        font-size: 11px;
+                    }
+
+                    .admin-badge {
+                        padding: 4px 8px;
+                        font-size: 10px;
+                    }
+                }
+            `;
+        document.head.appendChild(style);
+
+        // Enhanced keyboard shortcuts
+        document.addEventListener('keydown', function (e) {
+            // Don't trigger shortcuts if user is typing in an input
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                return;
+            }
+
+            switch (e.key.toLowerCase()) {
+                case 'p':
+                    if (e.ctrlKey || e.metaKey) {
+                        e.preventDefault();
+                        viewProfile();
+                    }
+                    break;
+                case 'l':
+                    if (e.ctrlKey || e.metaKey) {
+                        e.preventDefault();
+                        viewLeaderboard();
+                    }
+                    break;
+                case 'h':
+                    if (e.ctrlKey || e.metaKey) {
+                        e.preventDefault();
+                        viewAchievements();
+                    }
+                    break;
+                case 'm':
+                    if ((e.ctrlKey || e.metaKey) && localStorage.getItem('isAdmin') === 'true') {
+                        e.preventDefault();
+                        viewAdmin();
+                    }
+                    break;
+                case 'r':
+                    if (e.ctrlKey || e.metaKey) {
+                        e.preventDefault();
+                        if (game && game.gameOver) {
+                            restartGame();
+                        }
+                    }
+                    break;
+            }
+        });
+
+        // Show helpful tooltips on buttons
+        document.addEventListener('DOMContentLoaded', function () {
+            const tooltips = {
+                'pauseBtn': 'Pause/Resume (Space)',
+                'adminBtn': 'Admin Panel (Ctrl+M)',
+            };
+
+            Object.entries(tooltips).forEach(([id, tooltip]) => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.title = tooltip;
+                }
+            });
+
+            // Add tooltips to navigation buttons
+            const navButtons = document.querySelectorAll('.game-controls button');
+            navButtons.forEach(button => {
+                if (button.textContent.includes('Profile')) {
+                    button.title = 'View Profile (Ctrl+P)';
+                } else if (button.textContent.includes('Leaderboard')) {
+                    button.title = 'View Leaderboard (Ctrl+L)';
+                } else if (button.textContent.includes('Achievements')) {
+                    button.title = 'View Achievements (Ctrl+H)';
+                } else if (button.textContent.includes('Logout')) {
+                    button.title = 'Logout';
+                }
+            });
+        });
+
+        // Performance monitoring for admin users
+        if (localStorage.getItem('isAdmin') === 'true') {
+            let frameCount = 0;
+            let lastTime = performance.now();
+
+            function measureFPS() {
+                frameCount++;
+                const currentTime = performance.now();
+
+                if (currentTime - lastTime >= 1000) {
+                    const fps = Math.round((frameCount * 1000) / (currentTime - lastTime));
+
+                    // Add FPS display for admins
+                    let fpsDisplay = document.getElementById('fpsDisplay');
+                    if (!fpsDisplay) {
+                        fpsDisplay = document.createElement('div');
+                        fpsDisplay.id = 'fpsDisplay';
+                        fpsDisplay.style.cssText = `
+                                position: fixed;
+                                bottom: 20px;
+                                left: 20px;
+                                background: rgba(0, 0, 0, 0.7);
+                                color: white;
+                                padding: 5px 10px;
+                                border-radius: 15px;
+                                font-size: 12px;
+                                font-family: monospace;
+                                z-index: 1000;
+                            `;
+                        document.body.appendChild(fpsDisplay);
+                    }
+
+                    fpsDisplay.textContent = `FPS: ${fps}`;
+                    fpsDisplay.style.color = fps > 45 ? '#2ecc71' : fps > 30 ? '#f39c12' : '#e74c3c';
+
+                    frameCount = 0;
+                    lastTime = currentTime;
+                }
+
+                requestAnimationFrame(measureFPS);
+            }
+
+            measureFPS();
+        }
+    </script>
+</body>
+</html>

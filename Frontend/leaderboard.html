@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doodle Jump - Leaderboard</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="leaderboard-container">
+            <h1>Leaderboard - Top 10 Scores</h1>
+            <div class="leaderboard-table">
+                <div class="table-header">
+                    <span>Rank</span>
+                    <span>Player</span>
+                    <span>Score</span>
+                    <span>Date</span>
+                    <span>Actions</span>
+                </div>
+                <div id="leaderboardContent">
+                </div>
+            </div>
+            <div class="leaderboard-actions">
+                <button onclick="backToGame()">Back to Game</button>
+                <button onclick="refreshLeaderboard()">Refresh</button>
+                <button onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/leaderboard.js"></script>
+</body>
+</html>
